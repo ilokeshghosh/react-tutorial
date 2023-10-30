@@ -1,11 +1,20 @@
 import React, {useState} from 'react'
-import {useDispatch} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 import {addTodo, removeTodo, updateTodo} from '../features/todo/todoSlice'
 
 export default function AddTodo(){
 
     const [input, setInput] = useState('')
     const dispatch = useDispatch();
+    // const todos = useSelector((state)=> state.todos);
+
+   
+    
+     
+    
+    const handleInput=(text)=>{
+      setInput(text)
+    }
 
     function addTodoHandler(e){
       e.preventDefault()
@@ -20,7 +29,7 @@ export default function AddTodo(){
             className="bg-gray-800 rounded border border-gray-700 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-900 text-base outline-none text-gray-100 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
             placeholder="Enter a Todo..."
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={(e) => handleInput(e.target.value)}
           />
           <button
             type="submit"
