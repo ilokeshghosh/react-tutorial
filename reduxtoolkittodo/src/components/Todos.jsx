@@ -1,16 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { removeTodo, setIsEditable, updateTodo } from "../features/todo/todoSlice";
+import { changePriority, removeTodo, setIsEditable, updateTodo, changeStatus } from "../features/todo/todoSlice";
 // import { FaAdn } from "react-icons/fa6";
 import { FaPen } from "react-icons/fa";
 export default function Todos() {
   const todos = useSelector((state) => state.todos);
   const dispatch = useDispatch();
+  // const[priority, setPriority] = useState('low')
 
-  function handleChange(text, todo) {
-    console.log(text);
-    dispatch(updateTodo({ text: text, id: todo.id }))
-  }
+
+
+
   return (
     <>
       <div className="w-full">
@@ -18,28 +18,47 @@ export default function Todos() {
           Todo List
         </h1>
       </div>
-      <ul className="list-none">
+      <ul className="list-none  w-full flex flex-col justify-center items-center gap-4">
         {todos.map((todo) => (
           <li
-            className={`mt-4 flex  justify-between items-center bg-zinc-800 px-4 py-2 rounded `}
+            className={`mt-4 flex w-full md:w-[60%] mx-auto  justify-between items-center bg-zinc-800 px-4 py-2 rounded `}
             key={todo.id}
           >
             {/* <div className="text-white">{todo.text}</div> */}
-            <input
-              className={`text-white py-1 px-2 rounded-md w-2/3  bg-transparent outline-none ${todo.isEditable ? 'outline-zinc-500 bg-zinc-700' : ''}`}
-              value={todo.text}
-              readOnly={!todo.isEditable}
-              onChange={(e) => handleChange(e.target.value, todo)}
-              type="text"
-            />
+            <div className="w-2/3 flex justify-start md:gap-4 items-center">
+              <input
+                className="bg-slate-800"
+                type="checkbox"
+                value={todo.status}
+                onChange={(e) => dispatch(changeStatus(todo.id))}
+              />
+              <input
+                className={`text-white py-1 px-2 rounded-md w-[95%]  bg-transparent outline-none ${todo.isEditable ? 'outline-zinc-500 bg-zinc-700' : ''}`}
+                value={todo.text}
+                readOnly={!todo.isEditable}
+                onChange={(e) => dispatch(updateTodo({ text: e.target.value, id: todo.id }))}
+                type="text"
+              />
+            </div>
+
 
             <div className="flex justify-center items-center gap-2">
+              <select
+
+                value={todo.priority}
+                onChange={(e) => dispatch(changePriority({ id: todo.id, priority: e.target.value }))}
+                className={`text-center font-bold rounded-lg py-2 outline-none  ${todo.priority === 'high' ? 'bg-red-400' : 'bg-yellow-400'} ${todo.priority === 'low' ? 'bg-blue-400' : ''}`}
+              >
+                <option className="bg-red-400" value="high">High</option>
+                <option className="bg-yellow-400" value="medium">Medium</option>
+                <option className="bg-blue-400" value="low">Low</option>
+              </select>
               <button
-                value={todo.text}
+                // value={todo.text}
                 onClick={() =>
                   dispatch(setIsEditable(todo.id))
                 }
-                className={`text-white  border-0 py-2 px-4 focus:outline-none  rounded text-md ${todo.isEditable ? 'bg-green-400 hover:bg-green-600':'bg-yellow-400 hover:bg-yellow-600'}`}
+                className={`text-white  border-0 py-2 px-4 focus:outline-none  rounded text-md ${todo.isEditable ? 'bg-green-400 hover:bg-green-600' : 'bg-yellow-400 hover:bg-yellow-600'}`}
               >
 
                 {todo.isEditable ? '📁' : '✏'}
