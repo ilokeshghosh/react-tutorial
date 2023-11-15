@@ -1,11 +1,14 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useEffect, useState } from 'react'
+import {useDispatch} from 'react-redux'
 import './App.css'
-
+import authService  from './appwrite/auth'
 function App() {
-  const [count, setCount] = useState(0)
-  console.log(import.meta.env.VITE_APPWRITE_URL);
+ const[loading, setLoading] = useState(true);
+ const dispatch = useDispatch();
+
+ useEffect(()=>{
+})
+
   return (
     <>
      <h1>This is project Title</h1>
