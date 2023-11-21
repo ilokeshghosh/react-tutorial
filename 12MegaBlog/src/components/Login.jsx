@@ -5,6 +5,8 @@ import { Button, Input, Logo } from "./index";
 import { useDispatch } from "react-redux";
 import authService from "../appwrite/auth";
 import { useForm } from "react-hook-form";
+
+
 export default function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -48,7 +50,40 @@ export default function Login() {
           </Link>
         </p>
         {error && <p className="text-red-600 mt-8 text-center">{error}</p>}
-        
+        <form onSubmit={handleSubmit(login)} className="mt-8">
+          <div className="space-y-5">
+            <Input 
+            label='Email : '
+            placeholder = 'Enter your email'
+            type='email'
+            {...register('email',{
+              required:true,
+              validate:{
+                matchPattern:(value)=> /^([\w\.\-_]+)?\w+@[\w-_]+(\.\w+){1,}$/.test(value) || 'Email address must be a valid address'
+              }
+            })}
+            />
+
+            <Input
+            label='Password : '
+            placeholder='Enter your password'
+            type='password'
+            {...register('password',{
+              required:true,
+              validate:{
+                matchPattern:(value)=> /^(?=.*[A-Za-z])[a-zA-Z0-9]{6,12}$/.test(value) || 'Enter a valid Password'
+              }
+            })}
+            />
+
+            <Button
+            type='submit'
+            className='w-full '
+            >
+              Sign In
+            </Button>
+          </div>
+        </form>
       </div>
     </div>
   );
