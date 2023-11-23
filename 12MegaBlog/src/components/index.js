@@ -6,6 +6,7 @@ import LogoutBtn from "./Header/LogoutBtn";
 import Input from './Input'
 import Button from "./Button";
 import AuthLayout from './AuthLayout';
+import RTE from "./RTE";
 export {
     Header,
     Footer,
@@ -14,5 +15,6 @@ export {
     LogoutBtn,
     Input,
     Button,
-    AuthLayout
+    AuthLayout,
+    RTE
 }
