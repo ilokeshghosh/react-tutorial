@@ -1,6 +1,6 @@
 import React, { useId } from "react";
 
-
+// documentation link : https://react.dev/reference/react/forwardRef#exposing-a-dom-node-to-the-parent-component
 const Input = React.forwardRef(function Input({
     label,
     type='text',

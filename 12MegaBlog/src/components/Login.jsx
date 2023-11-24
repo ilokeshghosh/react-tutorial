@@ -56,6 +56,7 @@ export default function Login() {
             label='Email : '
             placeholder = 'Enter your email'
             type='email'
+            // register your input into the hook by invoking the "register" function
             {...register('email',{
               required:true,
               validate:{
