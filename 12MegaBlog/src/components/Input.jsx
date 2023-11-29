@@ -1,23 +1,17 @@
-import React, { useId } from "react";
+import React, {useId} from 'react'
 
-// documentation link : https://react.dev/reference/react/forwardRef#exposing-a-dom-node-to-the-parent-component
-const Input = React.forwardRef(function Input({
+const Input = React.forwardRef( function Input({
     label,
-    type='text',
-    className='',
+    type = "text",
+    className = "",
     ...props
 }, ref){
-    const id = useId();
+    const id = useId()
     return (
-        <div
-        className="w-full"
-        >
-            {
-            label && 
-            <label
-            className="inline-block mb-1 pl-1"
-            htmlFor={id}
-            >
+        <div className='w-full'>
+            {label && <label 
+            className='inline-block mb-1 pl-1' 
+            htmlFor={id}>
                 {label}
             </label>
             }
@@ -32,4 +26,4 @@ const Input = React.forwardRef(function Input({
     )
 })
 
-export default Input;
+export default Input

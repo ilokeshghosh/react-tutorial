@@ -1,28 +1,30 @@
-import { Form, useForm } from "react-hook-form";
-import { Button, Input, Select, RTE } from "../index";
+import React, { useCallback, useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { Button, Input, RTE, Select } from "..";
 import appwriteService from "../../appwrite/config";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { useCallback, useEffect } from "react";
 
 export default function PostForm({ post }) {
+  const userData = useSelector((state) => state.auth.userData);
   const navigate = useNavigate();
+  
+  
+
   const { register, handleSubmit, watch, setValue, control, getValues } =
     useForm({
       defaultValues: {
-        title: post?.title || " ",
-        slug: post?.slug || " ",
-        content: post?.content || " ",
+        title: post?.title || "",
+        slug: post?.$id || "",
+        content: post?.content || "",
         status: post?.status || "active",
       },
     });
 
-  const userData = useSelector((state) => state.user.userData);
-
   const submit = async (data) => {
     if (post) {
       const file = data.image[0]
-        ? appwriteService.uploadFile(data.image[0])
+        ? await appwriteService.uploadFile(data.image[0])
         : null;
 
       if (file) {
@@ -38,16 +40,14 @@ export default function PostForm({ post }) {
         navigate(`/post/${dbPost.$id}`);
       }
     } else {
-      // todo:check whether there is file
       const file = await appwriteService.uploadFile(data.image[0]);
-      // const file = data.image[0] ? await appwriteService.uploadFile(data.image[0]) : console.log('file not found')
 
       if (file) {
         const fileId = file.$id;
         data.featuredImage = fileId;
         const dbPost = await appwriteService.createPost({
           ...data,
-          userID: userData.$id,
+          userId: userData.$id,
         });
 
         if (dbPost) {
@@ -62,22 +62,20 @@ export default function PostForm({ post }) {
       return value
         .trim()
         .toLowerCase()
-        .replace(/^[a-zA-Z\d\s]+/g, "-")
+        .replace(/[^a-zA-Z\d\s]+/g, "-")
         .replace(/\s/g, "-");
 
     return "";
   }, []);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const subscription = watch((value, { name }) => {
       if (name === "title") {
-        setValue("slug", slugTransform(value.title, { shouldValidate: true }));
+        setValue("slug", slugTransform(value.title), { shouldValidate: true });
       }
     });
 
-    return () => {
-      subscription.unsubscribe();
-    };
+    return () => subscription.unsubscribe();
   }, [watch, slugTransform, setValue]);
 
   return (

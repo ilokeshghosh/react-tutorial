@@ -1,10 +1,14 @@
-import { Container,PostForm as PostFormComponent } from "../components";
-export default function AddPost(){
-    return(
-        <div className="py-8">
-            <Container>
-            <PostFormComponent/>
-            </Container>
-        </div>
-    )
+import React from 'react'
+import { Container, PostForm } from '../components'
+
+function AddPost() {
+  return (
+    <div className='py-8'>
+        <Container>
+            <PostForm />
+        </Container>
+    </div>
+  )
 }
+
+export default AddPost
