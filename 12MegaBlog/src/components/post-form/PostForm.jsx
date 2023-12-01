@@ -2,14 +2,14 @@ import React, { useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Button, Input, RTE, Select } from "..";
 import appwriteService from "../../appwrite/config";
+import { updatePosts } from "../../store/postSlice";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function PostForm({ post }) {
   const userData = useSelector((state) => state.auth.userData);
   const navigate = useNavigate();
-  
-  
+  const dispatch = useDispatch();
 
   const { register, handleSubmit, watch, setValue, control, getValues } =
     useForm({
@@ -37,7 +37,15 @@ export default function PostForm({ post }) {
       });
 
       if (dbPost) {
+        // title, content, featuredImage, status
+        // dispatch(updatePosts({slug:post.$id, data:{...data, featuredImage:file ? file.$id:undefined}}))
+
+        dispatch(
+          updatePosts({slug:post.$id, data:{title:data.title, content:data.content, status:data.status, featuredImage:file ? file.$id:undefined}})
+        );
+
         navigate(`/post/${dbPost.$id}`);
+        // navigate('/')
       }
     } else {
       const file = await appwriteService.uploadFile(data.image[0]);

@@ -3,25 +3,33 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import appwriteService from "../appwrite/config";
 import { Button, Container } from "../components";
 import parse from "html-react-parser";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { setPosts } from "../store/postSlice";
 
 export default function Post() {
   const [post, setPost] = useState(null);
+  const posts = useSelector((state) => state.post.posts);
   const { slug } = useParams();
   const navigate = useNavigate();
-
   const userData = useSelector((state) => state.auth.userData);
-
   const isAuthor = post && userData ? post.userId === userData.$id : false;
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    appwriteService.getPosts().then(posts=>{
+      if(posts){
+          dispatch(setPosts(posts.documents))
+          localStorage.setItem('posts',JSON.stringify(posts.documents))
+      }
+  });
+  }, []);
 
   useEffect(() => {
     if (slug) {
-      appwriteService.getPost(slug).then((post) => {
-        if (post) setPost(post);
-        else navigate("/");
-      });
+      const currentPost = posts.find((post) => post.$id === slug);
+      setPost(currentPost);
     } else navigate("/");
-  }, [slug, navigate]);
+  }, [slug, navigate, posts]);
 
   const deletePost = () => {
     appwriteService.deletePost(post.$id).then((status) => {
